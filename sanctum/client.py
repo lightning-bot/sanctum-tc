@@ -20,7 +20,8 @@ class HTTPClient:
             The path to send the request to.
         """
         url = self.api_url + path
-        await self.session.request(method, url, **kwargs)
+        resp = await self.session.request(method, url, **kwargs)
+        return await resp.json()
 
     async def get_guild(self, guild_id: int):
         return await self.request("GET", f"/guilds/{guild_id}")

@@ -1,9 +1,10 @@
+import json
+
 try:
     import orjson
 except ImportError:
     ORJSON_S = False
 else:
-    import json
     ORJSON_S = True
 
 

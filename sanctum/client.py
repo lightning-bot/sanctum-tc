@@ -1,6 +1,7 @@
 import aiohttp
 
 from .utils import _to_json
+from .exceptions import HTTPException
 
 __all__ = ("HTTPClient", )
 
@@ -28,10 +29,14 @@ class HTTPClient:
         url = self.api_url + path
 
         if data := kwargs.pop("data", None):
+            kwargs['headers'] = {'Content-Type': 'application/json'}
             kwargs['data'] = _to_json(data)
 
         async with self.session.request(method, url, **kwargs) as resp:
-            return await resp.json()
+            data = await resp.json()
+            if 300 > resp.status >= 200:
+                return data
+            raise HTTPException(resp.status, data)
 
     # Guild state management
 

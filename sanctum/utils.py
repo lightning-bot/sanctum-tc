@@ -1,7 +1,15 @@
 try:
-    import orjson as json
+    import orjson
 except ImportError:
+    ORJSON_S = False
+else:
     import json
+    ORJSON_S = True
 
-def _to_json(data: dict):
-    return json.dumps(data)
+
+if ORJSON_S:
+    def _to_json(data: dict):
+        return orjson.dumps(data).decode('utf-8')
+else:
+    def _to_json(data: dict):
+        return json.dumps(data, ensure_ascii=True)

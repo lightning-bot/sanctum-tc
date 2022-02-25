@@ -1,7 +1,7 @@
 import aiohttp
 
 from .utils import _to_json
-from .exceptions import HTTPException
+from .exceptions import HTTPException, NotFound
 
 __all__ = ("HTTPClient", )
 
@@ -36,6 +36,10 @@ class HTTPClient:
             data = await resp.json()
             if 300 > resp.status >= 200:
                 return data
+            
+            if resp.status == 404:
+                raise NotFound(resp.status, data)
+
             raise HTTPException(resp.status, data)
 
     # Guild state management

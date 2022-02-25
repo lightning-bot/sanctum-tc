@@ -15,7 +15,7 @@ class HTTPClient:
         """Closes the client session"""
         await self.session.close()
 
-    async def request(self, method: str, path: str, **kwargs):
+    async def request(self, method: str, path: str, **kwargs) -> dict:
         """Makes a request to the api.
 
         Parameters
@@ -33,6 +33,8 @@ class HTTPClient:
         async with self.session.request(method, url, **kwargs) as resp:
             return await resp.json()
 
+    # Guild state management
+
     async def get_guild(self, guild_id: int):
         return await self.request("GET", f"/guilds/{guild_id}")
 
@@ -41,6 +43,9 @@ class HTTPClient:
 
     async def update_guild(self, guild_id: int, payload: dict):
         return await self.create_guild(guild_id, payload)
+
+    async def leave_guild(self, guild_id: int):
+        return await self.request("DELETE", f"/guilds/{guild_id}/leave")
 
     # Timer management
 

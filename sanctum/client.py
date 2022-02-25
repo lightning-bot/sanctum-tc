@@ -1,5 +1,7 @@
 import aiohttp
 
+from .utils import _to_json
+
 __all__ = ("HTTPClient", )
 
 
@@ -24,6 +26,10 @@ class HTTPClient:
             The path to send the request to.
         """
         url = self.api_url + path
+
+        if data := kwargs.pop("data", None):
+            kwargs['data'] = _to_json(data)
+
         async with self.session.request(method, url, **kwargs) as resp:
             return await resp.json()
 

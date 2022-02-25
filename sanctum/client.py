@@ -9,6 +9,10 @@ class HTTPClient:
         self.session = aiohttp.ClientSession(headers={"User-Agent": "Sanctum-TC (https://gitlab.com/lightning-bot/sanctum-tc.git)",
                                                       "Authorization": f"Bearer {token}"})
 
+    async def close(self):
+        """Closes the client session"""
+        await self.session.close()
+
     async def request(self, method: str, path: str, **kwargs):
         """Makes a request to the api.
 
@@ -20,14 +24,31 @@ class HTTPClient:
             The path to send the request to.
         """
         url = self.api_url + path
-        resp = await self.session.request(method, url, **kwargs)
-        return await resp.json()
+        async with self.session.request(method, url, **kwargs) as resp:
+            return await resp.json()
 
     async def get_guild(self, guild_id: int):
         return await self.request("GET", f"/guilds/{guild_id}")
 
     async def create_guild(self, guild_id: int, payload: dict):
-        return await self.request("PUT", f"/guilds/{guild_id}/create", data=payload)
+        return await self.request("PUT", f"/guilds/{guild_id}", data=payload)
 
     async def update_guild(self, guild_id: int, payload: dict):
         return await self.create_guild(guild_id, payload)
+
+    # Timer management
+
+    async def create_timer(self, payload: dict):
+        return await self.request("PUT", "/timers", data=payload)
+
+    async def delete_timer(self, id: int):
+        return await self.request("DELETE", f"/timers/{id}")
+
+    async def get_timer(self, id: int):
+        return await self.request("GET", f"/timers/{id}")
+
+    async def get_timers(self, *, limit: int = 1):
+        return await self.request("GET", "/timers", params={"limit": str(limit)})
+
+    async def get_user_reminders(self, user_id: int, *, limit: int = 10):
+        return await self.request("GET", f"/users/{user_id}/reminders", params={"limit": str(limit)})

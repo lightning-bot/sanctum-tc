@@ -72,3 +72,6 @@ class HTTPClient:
 
     async def get_user_reminders(self, user_id: int, *, limit: int = 10):
         return await self.request("GET", f"/users/{user_id}/reminders", params={"limit": str(limit)})
+
+    async def delete_user_reminder(self, user_id: int, reminder_id: int):
+        return await self.request("DELETE", f"/users/{user_id}/reminders/{reminder_id}")

@@ -1,6 +1,6 @@
-# Sanctum-TC
+# sanctum-tc
 
-Library for interacting with the Sanctum API
+Python library for interacting with the Sanctum API
 
 
 ## Usage

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sanctum-tc"
-version = "0.3.1"
+version = "0.4.0"
 description = "Library for interacting with the Sanctum API"
 authors = ["LightSage <lightsage01@gmail.com>"]
 license = "MIT"
@@ -11,7 +11,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-aiohttp = ">=3.6.0,<3.8.0"
+aiohttp = ">=3.6.0,<4.0.0"
 
 [tool.poetry.dev-dependencies]
 

@@ -75,3 +75,26 @@ class HTTPClient:
 
     async def delete_user_reminder(self, user_id: int, reminder_id: int):
         return await self.request("DELETE", f"/users/{user_id}/reminders/{reminder_id}")
+
+    # Infraction management
+
+    async def create_infraction(self, guild_id: int, payload: dict):
+        return await self.request("PUT", f"/guilds/{guild_id}/infractions", data=payload)
+
+    async def get_infraction(self, guild_id: int, infraction_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/infractions/{infraction_id}")
+
+    async def get_infractions(self, guild_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/infractions")
+
+    async def delete_infraction(self, guild_id: int, infraction_id: int):
+        return await self.request("DELETE", f"/guilds/{guild_id}/infractions/{infraction_id}")
+    
+    async def edit_infraction(self, guild_id: int, infraction_id: int, payload: dict):
+        return await self.request("PATCH", f"/guilds/{guild_id}/infractions/{infraction_id}", data=payload)
+
+    async def bulk_delete_user_infractions(self, guild_id: int, user_id: int):
+        return await self.request("DELETE", f"/guilds/{guild_id}/users/{user_id}/infractions")
+
+    async def get_user_infractions(self, guild_id, user_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/users/{user_id}/infractions")

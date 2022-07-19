@@ -1,3 +1,5 @@
+from typing import List
+
 import aiohttp
 
 from .utils import _to_json
@@ -98,3 +100,10 @@ class HTTPClient:
 
     async def get_user_infractions(self, guild_id, user_id: int):
         return await self.request("GET", f"/guilds/{guild_id}/users/{user_id}/infractions")
+
+    # Configuration
+    async def get_guild_bot_config(self, guild_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/config")
+
+    async def bulk_upsert_guild_prefixes(self, guild_id: int, prefixes: List[str]):
+        return await self.request("PUT", f"/guilds/{guild_id}/prefixes", data=prefixes)

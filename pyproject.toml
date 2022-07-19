@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sanctum-tc"
-version = "0.4.0"
+version = "0.5.0"
 description = "Library for interacting with the Sanctum API"
 authors = ["LightSage <lightsage01@gmail.com>"]
 license = "MIT"

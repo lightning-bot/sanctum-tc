@@ -12,7 +12,7 @@ class HTTPClient:
     def __init__(self, api_url: str, token: str) -> None:
         self.api_url = api_url
         self.session = aiohttp.ClientSession(headers={"User-Agent": "Sanctum-TC (https://gitlab.com/lightning-bot/sanctum-tc.git)",
-                                                      "Authorization": f"Bearer {token}"})
+                                                      "X-API-Key": token})
 
     async def close(self):
         """Closes the client session"""

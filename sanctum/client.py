@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List
 
 import aiohttp
 
@@ -19,7 +19,7 @@ class HTTPClient:
         await self.session.close()
 
     async def request(self, method: str, path: str, **kwargs) -> dict:
-        """Makes a request to the api.
+        """Makes a request to the API.
 
         Parameters
         ----------
@@ -72,6 +72,9 @@ class HTTPClient:
     async def get_timers(self, *, limit: int = 1):
         return await self.request("GET", "/timers", params={"limit": str(limit)})
 
+    async def get_user_reminder(self, user_id: int, reminder_id: int):
+        return await self.request("GET", f"/users/{user_id}/reminders/{reminder_id}")
+
     async def get_user_reminders(self, user_id: int, *, limit: int = 10):
         return await self.request("GET", f"/users/{user_id}/reminders", params={"limit": str(limit)})
 
@@ -107,3 +110,26 @@ class HTTPClient:
 
     async def bulk_upsert_guild_prefixes(self, guild_id: int, prefixes: List[str]):
         return await self.request("PUT", f"/guilds/{guild_id}/prefixes", data=prefixes)
+
+    # Pastes
+    async def create_paste(self, text: str):
+        return await self.request("PUT", "/admin/paste", data={'text': text})
+
+    async def delete_paste(self, url: str):
+        return await self.request("DELETE", "/admin/paste", params={'url': url})
+
+    # AutoMod
+    async def get_guild_automod_config(self, guild_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/automod")
+
+    async def bulk_upsert_guild_automod_default_ignores(self, guild_id: int, ignores: List[int]):
+        return await self.request("PUT", f"/guilds/{guild_id}/automod/ignores", data=ignores)
+
+    async def get_guild_automod_rules(self, guild_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/automod/rules")
+    
+    async def create_guild_automod_rule(self, guild_id: int, payload: Dict[str, Any]):
+        return await self.request("PUT", f"/guilds/{guild_id}/automod/rules", data=payload)
+
+    async def delete_guild_automod_rules(self, guild_id: int, rule: str):
+        return await self.request("DELETE", f"/guilds/{guild_id}/automod/rules/{rule}")

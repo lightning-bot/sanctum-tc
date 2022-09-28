@@ -43,7 +43,7 @@ class HTTPClient:
                 raise NotFound(resp.status, data)
 
             if resp.status == 409:
-                raise DataConflict(resp.start, data)
+                raise DataConflict(resp.status, data)
 
             raise HTTPException(resp.status, data)
 

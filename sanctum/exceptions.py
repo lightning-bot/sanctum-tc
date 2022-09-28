@@ -1,4 +1,4 @@
-__all__ = ("HTTPException", "NotFound", )
+__all__ = ("HTTPException", "NotFound", "DataConflict")
 
 class HTTPException(Exception):
     def __init__(self, status_code, data) -> None:
@@ -10,5 +10,12 @@ class HTTPException(Exception):
 class NotFound(HTTPException):
     """
     An exception that is raised when a 404 status code occurs.
+    """
+    pass
+
+
+class DataConflict(HTTPException):
+    """
+    An exception that is raised when a 409 status code occurs.
     """
     pass

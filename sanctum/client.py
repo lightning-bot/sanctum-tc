@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 import aiohttp
 
 from .utils import _to_json
-from .exceptions import HTTPException, NotFound
+from .exceptions import HTTPException, NotFound, DataConflict
 
 __all__ = ("HTTPClient", )
 
@@ -41,6 +41,9 @@ class HTTPClient:
             
             if resp.status == 404:
                 raise NotFound(resp.status, data)
+
+            if resp.status == 409:
+                raise DataConflict(resp.start, data)
 
             raise HTTPException(resp.status, data)
 

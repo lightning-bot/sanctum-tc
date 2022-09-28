@@ -134,5 +134,5 @@ class HTTPClient:
     async def create_guild_automod_rule(self, guild_id: int, payload: Dict[str, Any]):
         return await self.request("PUT", f"/guilds/{guild_id}/automod/rules", data=payload)
 
-    async def delete_guild_automod_rules(self, guild_id: int, rule: str):
+    async def delete_guild_automod_rule(self, guild_id: int, rule: str):
         return await self.request("DELETE", f"/guilds/{guild_id}/automod/rules/{rule}")

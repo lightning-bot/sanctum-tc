@@ -11,7 +11,7 @@ __all__ = ("HTTPClient", )
 class HTTPClient:
     def __init__(self, api_url: str, token: str) -> None:
         self.api_url = api_url
-        self.session = aiohttp.ClientSession(headers={"User-Agent": "Sanctum-TC (https://gitlab.com/lightning-bot/sanctum-tc.git)",
+        self.session = aiohttp.ClientSession(headers={"User-Agent": "Sanctum-TC (https://github.com/lightning-bot/sanctum-tc.git)",
                                                       "X-API-Key": token})
 
     async def close(self):
@@ -113,6 +113,9 @@ class HTTPClient:
 
     async def bulk_upsert_guild_prefixes(self, guild_id: int, prefixes: List[str]):
         return await self.request("PUT", f"/guilds/{guild_id}/prefixes", data=prefixes)
+    
+    async def get_guild_moderation_config(self, guild_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/config/moderation")
 
     # Pastes
     async def create_paste(self, text: str):
@@ -136,3 +139,19 @@ class HTTPClient:
 
     async def delete_guild_automod_rule(self, guild_id: int, rule: str):
         return await self.request("DELETE", f"/guilds/{guild_id}/automod/rules/{rule}")
+
+    # Message Reports
+    async def get_guild_message_report(self, guild_id: int, message_id: int):
+        return await self.request("GET", f"/guilds/{guild_id}/reports/{message_id}")
+
+    async def create_guild_message_report(self, guild_id: int, payload: Dict[str, Any]):
+        return await self.request("PUT", f"/guilds/{guild_id}/reports", data=payload)
+
+    async def add_guild_message_reporter(self, guild_id: int, message_id: int, payload: Dict[str, Any]):
+        return await self.request("PUT", f"/guilds/{guild_id}/reports/{message_id}/reporters", data=payload)
+
+    async def get_guild_message_reporters(self, guild_id: int, message_id: int):
+        ...
+
+    async def edit_guild_message_report(self, guild_id: int, message_id: int, payload: Dict[str, Any]):
+        return await self.request("PATCH", f"/guilds/{guild_id}/reports/{message_id}", data=payload)

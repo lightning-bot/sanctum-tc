@@ -151,7 +151,7 @@ class HTTPClient:
         return await self.request("PUT", f"/guilds/{guild_id}/reports/{message_id}/reporters", data=payload)
 
     async def get_guild_message_reporters(self, guild_id: int, message_id: int):
-        ...
+        return await self.request("GET", f"/guilds/{guild_id}/reports/{message_id}/reporters")
 
     async def edit_guild_message_report(self, guild_id: int, message_id: int, payload: Dict[str, Any]):
         return await self.request("PATCH", f"/guilds/{guild_id}/reports/{message_id}", data=payload)

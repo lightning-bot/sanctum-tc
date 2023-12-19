@@ -92,8 +92,14 @@ class HTTPClient:
     async def get_infraction(self, guild_id: int, infraction_id: int):
         return await self.request("GET", f"/guilds/{guild_id}/infractions/{infraction_id}")
 
-    async def get_infractions(self, guild_id: int):
-        return await self.request("GET", f"/guilds/{guild_id}/infractions")
+    async def get_infractions(self, guild_id: int,
+                              action_num: Optional[int] = None):
+        params = {}
+        if action_num is not None:
+            params['action'] = action_num
+
+        return await self.request("GET", f"/guilds/{guild_id}/infractions",
+                                  params=params)
 
     async def delete_infraction(self, guild_id: int, infraction_id: int):
         return await self.request("DELETE", f"/guilds/{guild_id}/infractions/{infraction_id}")

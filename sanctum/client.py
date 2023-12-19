@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 
@@ -38,7 +38,7 @@ class HTTPClient:
             data = await resp.json()
             if 300 > resp.status >= 200:
                 return data
-            
+
             if resp.status == 404:
                 raise NotFound(resp.status, data)
 
@@ -97,15 +97,20 @@ class HTTPClient:
 
     async def delete_infraction(self, guild_id: int, infraction_id: int):
         return await self.request("DELETE", f"/guilds/{guild_id}/infractions/{infraction_id}")
-    
+
     async def edit_infraction(self, guild_id: int, infraction_id: int, payload: dict):
         return await self.request("PATCH", f"/guilds/{guild_id}/infractions/{infraction_id}", data=payload)
 
     async def bulk_delete_user_infractions(self, guild_id: int, user_id: int):
         return await self.request("DELETE", f"/guilds/{guild_id}/users/{user_id}/infractions")
 
-    async def get_user_infractions(self, guild_id, user_id: int):
-        return await self.request("GET", f"/guilds/{guild_id}/users/{user_id}/infractions")
+    async def get_user_infractions(self, guild_id, user_id: int, *,
+                                   action_num: Optional[int] = None):
+        params = {}
+        if action_num is not None:
+            params['action'] = action_num
+
+        return await self.request("GET", f"/guilds/{guild_id}/users/{user_id}/infractions", params=params)
 
     # Configuration
     async def get_guild_bot_config(self, guild_id: int):
@@ -113,7 +118,7 @@ class HTTPClient:
 
     async def bulk_upsert_guild_prefixes(self, guild_id: int, prefixes: List[str]):
         return await self.request("PUT", f"/guilds/{guild_id}/prefixes", data=prefixes)
-    
+
     async def get_guild_moderation_config(self, guild_id: int):
         return await self.request("GET", f"/guilds/{guild_id}/config/moderation")
 
@@ -133,7 +138,7 @@ class HTTPClient:
 
     async def get_guild_automod_rules(self, guild_id: int):
         return await self.request("GET", f"/guilds/{guild_id}/automod/rules")
-    
+
     async def create_guild_automod_rule(self, guild_id: int, payload: Dict[str, Any]):
         return await self.request("PUT", f"/guilds/{guild_id}/automod/rules", data=payload)
 
